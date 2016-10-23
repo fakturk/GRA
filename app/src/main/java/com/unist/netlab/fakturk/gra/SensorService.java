@@ -60,9 +60,9 @@ public class SensorService extends Service implements SensorEventListener
 //        Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
         SM = (SensorManager)getSystemService(SENSOR_SERVICE);
 
-        SM.registerListener(this, SM.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), 10000);
-        SM.registerListener(this, SM.getDefaultSensor(Sensor.TYPE_GYROSCOPE), 10000);
-        SM.registerListener(this, SM.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), 10000);
+        SM.registerListener(this, SM.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), 10);
+        SM.registerListener(this, SM.getDefaultSensor(Sensor.TYPE_GYROSCOPE), 10);
+        SM.registerListener(this, SM.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD), 10);
 
         Intent bIntent = new Intent(SensorService.this, MainActivity.class);
         PendingIntent pbIntent = PendingIntent.getActivity(SensorService.this, 0 , bIntent, 0);
