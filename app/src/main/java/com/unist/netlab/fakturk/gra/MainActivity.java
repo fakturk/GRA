@@ -4,13 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.net.Uri;
+import android.graphics.Color;
+import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -31,10 +28,17 @@ public class MainActivity extends AppCompatActivity {
 
     DynamicAcceleration dynamic;
 
+    ArrowView arrowView;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
+        arrowView = new ArrowView(this);
+        arrowView.setBackgroundColor(Color.WHITE);
+        setContentView(arrowView);
+
         setContentView(R.layout.activity_main);
 
         tv_gravity = (TextView) findViewById(R.id.tv_gravity);
@@ -51,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
         dynamic = new DynamicAcceleration();
 
         start = false;
+
+
 
 
 
@@ -123,22 +129,24 @@ public class MainActivity extends AppCompatActivity {
         }, new IntentFilter(SensorService.ACTION_SENSOR_BROADCAST));
 
 
-        buttonStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (buttonStart.getText().equals("Start")) {
-                    buttonStart.setText("Stop");
-                    startService(new Intent(MainActivity.this, SensorService.class));
-
-                } else {
-                    buttonStart.setText("Start");
-                    stopService(new Intent(MainActivity.this, SensorService.class));
-
-
-                }
-            }
-        });
+//        buttonStart.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (buttonStart.getText().equals("Start")) {
+//                    buttonStart.setText("Stop");
+//                    startService(new Intent(MainActivity.this, SensorService.class));
+//
+//                } else {
+//                    buttonStart.setText("Start");
+//                    stopService(new Intent(MainActivity.this, SensorService.class));
+//
+//
+//                }
+//            }
+//        });
     }
+
+
 
     @Override
     protected void onPause() {
