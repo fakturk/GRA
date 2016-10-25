@@ -4,10 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -29,17 +29,18 @@ public class MainActivity extends AppCompatActivity {
     DynamicAcceleration dynamic;
 
     ArrowView arrowView;
+//    SurfaceHolder surfaceHolder;
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
-        arrowView = new ArrowView(this);
-        arrowView.setBackgroundColor(Color.WHITE);
-        setContentView(arrowView);
-
         setContentView(R.layout.activity_main);
+        arrowView = (ArrowView) findViewById(R.id.arrowView);
+//        surfaceHolder = arrowView.getHolder();
+//        surfaceHolder.addCallback(arrowView);
+
 
         tv_gravity = (TextView) findViewById(R.id.tv_gravity);
         buttonStart = (Button) findViewById(R.id.buttonStart);
@@ -55,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
         dynamic = new DynamicAcceleration();
 
         start = false;
+
+        arrowView.setLine(0,100);
+
 
 
 
@@ -115,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
                     for (int j = 0; j < 3; j++) {
                         gravity[j] = dynamicAcc[j+9];
                     }
+                    arrowView.setLine((-1)*gravity[0]*20,gravity[1]*20);
                     textProcessed =
                              "Acc : "+    df.format(dynamicAcc[0])+", "+df.format(dynamicAcc[1])+", "+df.format(dynamicAcc[2])+"\n"
                             +"Vel : "+    df.format(dynamicAcc[3])+", "+df.format(dynamicAcc[4])+", "+df.format(dynamicAcc[5])+"\n"
@@ -129,21 +134,21 @@ public class MainActivity extends AppCompatActivity {
         }, new IntentFilter(SensorService.ACTION_SENSOR_BROADCAST));
 
 
-//        buttonStart.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (buttonStart.getText().equals("Start")) {
-//                    buttonStart.setText("Stop");
-//                    startService(new Intent(MainActivity.this, SensorService.class));
-//
-//                } else {
-//                    buttonStart.setText("Start");
-//                    stopService(new Intent(MainActivity.this, SensorService.class));
-//
-//
-//                }
-//            }
-//        });
+        buttonStart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (buttonStart.getText().equals("Start")) {
+                    buttonStart.setText("Stop");
+                    startService(new Intent(MainActivity.this, SensorService.class));
+
+                } else {
+                    buttonStart.setText("Start");
+                    stopService(new Intent(MainActivity.this, SensorService.class));
+
+
+                }
+            }
+        });
     }
 
 
