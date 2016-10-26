@@ -109,7 +109,7 @@ public class ArrowView extends SurfaceView implements SurfaceHolder.Callback
                         {
                             c.drawLine(lineStartX,lineStartY,lineStartX+lineFinishX,lineStartY+lineFinishY,paintBlue);
                         }
-                        c.drawLine(lineZStartX,lineZStartY,lineZStartX+lineZFinishX,lineZStartY+lineZFinishY,paint);
+                        c.drawLine(lineZStartX,lineZStartY,lineZStartX+lineZFinishX,lineZStartY+lineZFinishY,paintRed);
 
                         canvas.drawBitmap (mBitmap, 0,  0,null);
                     } finally {
@@ -176,7 +176,7 @@ public class ArrowView extends SurfaceView implements SurfaceHolder.Callback
         paintRed.setStyle(Paint.Style.STROKE);
         paintRed.setStrokeWidth(8);
 
-        paintBlue.setColor(Color.GREEN);
+        paintBlue.setColor(Color.BLUE);
         paintBlue.setStyle(Paint.Style.STROKE);
         paintBlue.setStrokeWidth(8);
 
@@ -197,7 +197,7 @@ public class ArrowView extends SurfaceView implements SurfaceHolder.Callback
         lineStartY = this.getHeight()/2;
         lineZStartX = this.getWidth()-50;
         lineZStartY = lineStartY;
-        lineZFinishX = lineZStartX;
+        lineZFinishX = 0;
 
     }
 
