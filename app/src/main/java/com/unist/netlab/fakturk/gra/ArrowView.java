@@ -15,8 +15,12 @@ import android.view.SurfaceView;
 
 public class ArrowView extends SurfaceView implements SurfaceHolder.Callback
 {
-    Paint paint = new Paint();
-    float lineStartX, lineStartY, lineFinishX, lineFinishY;
+    Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    Paint paintRed = new Paint(Paint.ANTI_ALIAS_FLAG);
+    Paint paintBlue = new Paint(Paint.ANTI_ALIAS_FLAG);
+    Paint paintGreen= new Paint(Paint.ANTI_ALIAS_FLAG);
+
+    float lineStartX, lineStartY, lineFinishX, lineFinishY, lineZStartX, lineZStartY, lineZFinishX, lineZFinishY;
     Canvas canvas;
     int width, height, clientHeight;
     Context context;
@@ -53,13 +57,10 @@ public class ArrowView extends SurfaceView implements SurfaceHolder.Callback
 //        Paint paint = new Paint();
 
 
-//the bitmap we wish to draw
-
-//         mbitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.topArrow);
-
         SurfaceHolder holder = getHolder();
 
         holder.addCallback(this);
+        thread = new DrawThread(holder);
     }
 
     class DrawThread extends Thread {
@@ -92,9 +93,23 @@ public class ArrowView extends SurfaceView implements SurfaceHolder.Callback
                         final Canvas c = new Canvas (mBitmap);
 
                         c.drawColor(Color.WHITE);
-                        c.drawCircle(80,80, 30, paint);
-                        c.drawLine(80, 80, 80, 200, paint);
-                        c.drawText(""+canvas.getWidth()+", "+canvas.getHeight(), 0, 200,paint);
+//                        c.drawCircle(80,80, 30, paint);
+//                        c.drawLine(80, 80, 80, 200, paint);
+//                        c.drawText(""+canvas.getWidth()+", "+canvas.getHeight(), 0, 200,paint);
+//                        c.drawLine(0, 0, 250, 250, paint);
+//                        c.drawLine(250, 0, 0, 250, paint);
+
+                        System.out.println("ondraw: "+lineStartX+", "+lineStartY+", "+lineFinishX+", "+lineFinishY);
+
+                        if (Math.abs(lineFinishX)>Math.abs(lineFinishY))
+                        {
+                            c.drawLine(lineStartX,lineStartY,lineStartX+lineFinishX,lineStartY+lineFinishY,paintGreen);
+                        }
+                        else
+                        {
+                            c.drawLine(lineStartX,lineStartY,lineStartX+lineFinishX,lineStartY+lineFinishY,paintBlue);
+                        }
+                        c.drawLine(lineZStartX,lineZStartY,lineZStartX+lineZFinishX,lineZStartY+lineZFinishY,paint);
 
                         canvas.drawBitmap (mBitmap, 0,  0,null);
                     } finally {
@@ -106,19 +121,13 @@ public class ArrowView extends SurfaceView implements SurfaceHolder.Callback
     }
 
 
-    @Override
-    protected void onDraw(Canvas canvas)
-    {
-        super.onDraw(canvas);
-        lineStartX= this.getWidth()/2;
-        lineStartY = this.getHeight()/2;
-        System.out.println("ondraw: "+lineStartX+", "+lineStartY+", "+lineFinishX+", "+lineFinishY);
-
-        canvas.drawLine(0, 0, 250, 250, paint);
-        canvas.drawLine(250, 0, 0, 250, paint);
-        canvas.drawLine(lineStartX,lineStartY,lineStartX+lineFinishX,lineStartY+lineFinishY,paint);
-
-    }
+//    @Override
+//    protected void onDraw(Canvas canvas)
+//    {
+//        super.onDraw(canvas);
+//
+//
+//    }
 //
 //    @Override
 //    protected void dispatchDraw(Canvas canvas)
@@ -135,12 +144,16 @@ public class ArrowView extends SurfaceView implements SurfaceHolder.Callback
 //
 //    }
 
-    void setLine(float lineFinishX, float lineFinishY)
+    void setLine(float lineFinishX, float lineFinishY, float lineFinishZ)
     {
+        isDrawing=true;
+
         this.lineFinishX = lineFinishX;
         this.lineFinishY = lineFinishY;
+        this.lineZFinishY = lineFinishZ;
         System.out.println("setLine: "+lineStartX+", "+lineStartY+", "+lineFinishX+", "+lineFinishY);
 //        invalidate();
+        isDrawing=false;
         System.out.println("setLine after invalidate: "+lineStartX+", "+lineStartY+", "+lineFinishX+", "+lineFinishY);
 
     }
@@ -150,6 +163,22 @@ public class ArrowView extends SurfaceView implements SurfaceHolder.Callback
 //        setWillNotDraw(false);
         mHolder = getHolder();
         mHolder.addCallback(this);
+
+        paint.setColor(Color.BLACK);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(8);
+
+        paintGreen.setColor(Color.GREEN);
+        paintGreen.setStyle(Paint.Style.STROKE);
+        paintGreen.setStrokeWidth(8);
+
+        paintRed.setColor(Color.RED);
+        paintRed.setStyle(Paint.Style.STROKE);
+        paintRed.setStrokeWidth(8);
+
+        paintBlue.setColor(Color.GREEN);
+        paintBlue.setStyle(Paint.Style.STROKE);
+        paintBlue.setStrokeWidth(8);
 
         lineStartX=0;
         lineStartY=0;
@@ -164,10 +193,16 @@ public class ArrowView extends SurfaceView implements SurfaceHolder.Callback
 // Starts thread execution
         thread.setRunning(true);
         thread.start();
+        lineStartX= this.getWidth()/2;
+        lineStartY = this.getHeight()/2;
+        lineZStartX = this.getWidth()-50;
+        lineZStartY = lineStartY;
+        lineZFinishX = lineZStartX;
+
     }
 
     @Override
-    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2)
+    public void surfaceChanged(SurfaceHolder surfaceHolder, int format, int width,  int height)
     {
         mBitmap =  Bitmap.createBitmap (width, height, Bitmap.Config.ARGB_8888);
     }

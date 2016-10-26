@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
         start = false;
 
-        arrowView.setLine(0,100);
+        arrowView.setLine(100,100,100);
 
 
 
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
                     for (int j = 0; j < 3; j++) {
                         gravity[j] = dynamicAcc[j+9];
                     }
-                    arrowView.setLine((-1)*gravity[0]*20,gravity[1]*20);
+                    arrowView.setLine((-1)*gravity[0]*20,gravity[1]*20,gravity[2]*20);
                     textProcessed =
                              "Acc : "+    df.format(dynamicAcc[0])+", "+df.format(dynamicAcc[1])+", "+df.format(dynamicAcc[2])+"\n"
                             +"Vel : "+    df.format(dynamicAcc[3])+", "+df.format(dynamicAcc[4])+", "+df.format(dynamicAcc[5])+"\n"
